@@ -34,6 +34,10 @@ fs.readdirSync(imagesDir).forEach(file => {
   fs.copyFileSync(`${imagesDir}/${file}`, `${outDir}/images/${file}`);
 });
 
+// Copy favicon and OG image
+fs.copyFileSync('./public/favicon.png', `${outDir}/favicon.png`);
+fs.copyFileSync('./public/og-image.png', `${outDir}/og-image.png`);
+
 const header = `
 <header>
   <div class="header-inner">
@@ -50,13 +54,24 @@ const header = `
 
 const footer = `<footer></footer>`;
 
-const htmlHead = (title, description = "Conversations with people thinking about tech and its impact on society.") => `<!DOCTYPE html>
+const siteDescription = "Conversations with people thinking about tech and its impact on society.";
+
+const htmlHead = (title, description = siteDescription, ogImage = "/og-image.png") => `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
   <meta name="description" content="${description.replace(/"/g, '&quot;').substring(0, 160)}">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description.replace(/"/g, '&quot;').substring(0, 160)}">
+  <meta property="og:image" content="${ogImage}">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description.replace(/"/g, '&quot;').substring(0, 160)}">
+  <meta name="twitter:image" content="${ogImage}">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
