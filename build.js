@@ -34,9 +34,10 @@ fs.readdirSync(imagesDir).forEach(file => {
   fs.copyFileSync(`${imagesDir}/${file}`, `${outDir}/images/${file}`);
 });
 
-// Copy favicon and OG image
+// Copy favicon, OG image, and CNAME
 fs.copyFileSync('./public/favicon.png', `${outDir}/favicon.png`);
 fs.copyFileSync('./public/og-image.png', `${outDir}/og-image.png`);
+fs.copyFileSync('./public/CNAME', `${outDir}/CNAME`);
 
 const header = `
 <header>
@@ -56,7 +57,7 @@ const footer = `<footer></footer>`;
 
 const siteDescription = "Conversations with people thinking about tech and its impact on society.";
 
-const htmlHead = (title, description = siteDescription, ogImage = "/og-image.png") => `<!DOCTYPE html>
+const htmlHead = (title, description = siteDescription, ogImage = "https://theframeworkproject.com/og-image.png") => `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
