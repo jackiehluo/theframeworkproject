@@ -145,10 +145,12 @@ function getIntro(interview) {
 function getMainContent(content) {
   // Remove the intro div with h3s
   let main = content.replace(/<div class="sqs-html-content"[^>]*>\s*<h3[\s\S]*?<\/div>\s*<hr\s*\/?>/i, '');
-  // Clean up Squarespace wrapper divs
+  // Strip all Squarespace wrapper divs (open and dangling close tags).
   main = main.replace(/<div class="sqs-html-content"[^>]*>/g, '');
-  main = main.replace(/<\/div>\s*<div class="sqs-html-content"[^>]*>/g, '');
-  main = main.replace(/<\/div>\s*$/g, '');
+  main = main.replace(/<\/div>/g, '');
+  // Unwrap speaker labels: <p><strong>NAME</strong></p> → <h4 class="speaker">NAME</h4>
+  // Avoids the invalid-HTML margin-collapse issues caused by block-display <strong> inside <p>.
+  main = main.replace(/<p(?:\s[^>]*)?>\s*<strong>([^<]+)<\/strong>\s*<\/p>/g, '<h4 class="speaker">$1</h4>');
   return main.trim();
 }
 
@@ -436,13 +438,14 @@ footer {
   text-decoration: underline;
 }
 
-.interview-content strong {
-  display: block;
+.interview-content .speaker {
   font-weight: 700;
-  margin-top: 2.5rem;
-  margin-bottom: 0.75rem;
   font-size: 0.875rem;
   text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+  clear: both;
 }
 
 /* Pull quotes */
